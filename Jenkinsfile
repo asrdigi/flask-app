@@ -18,7 +18,11 @@ pipeline {
 
             steps {
 
-                sh 'pip3 install -r requirements.txt'
+                sh '''
+                    python3 -m venv venv
+                    . venv/bin/activate
+                    pip install -r requirements.txt
+                '''
             }
         }
 
@@ -26,9 +30,10 @@ pipeline {
 
             steps {
 
-                echo 'Running Tests'
-
-                sh 'pytest'
+                sh '''
+                    . venv/bin/activate
+                    pytest
+                '''
             }
         }
     }
