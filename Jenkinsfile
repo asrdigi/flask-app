@@ -99,6 +99,31 @@ stage('Kubernetes Connectivity Test') {
     }
 }
 
+stage('Deploy to Kubernetes') {
+
+    steps {
+
+        withCredentials([
+            file(
+                credentialsId: 'kubeconfig',
+                variable: 'KUBECONFIG_FILE'
+            )
+        ]) {
+
+            sh '''
+                export KUBECONFIG=$KUBECONFIG_FILE
+
+                kubectl apply -f k8s/
+
+                kubectl rollout status deployment/flask-demo
+
+                kubectl get pods
+
+                kubectl get svc
+            '''
+        }
+    }
+}
 
 
 
