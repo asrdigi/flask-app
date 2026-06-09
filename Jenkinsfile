@@ -77,6 +77,28 @@ stage('Push Image') {
     }
 }
 
+stage('Kubernetes Connectivity Test') {
+
+    steps {
+
+        withCredentials([
+            file(
+                credentialsId: 'kubeconfig',
+                variable: 'KUBECONFIG_FILE'
+            )
+        ]) {
+
+            sh '''
+                export KUBECONFIG=$KUBECONFIG_FILE
+
+                kubectl config current-context
+
+                kubectl get nodes
+            '''
+        }
+    }
+}
+
 
 
 
